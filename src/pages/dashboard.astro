@@ -1,0 +1,308 @@
+---
+import Layout from '../layouts/Layout.astro';
+import dbConnect from '../lib/db';
+import Link from '../lib/models/Link';
+import User from '../lib/models/User';
+import { Plus, Trash2, Archive, Link2, ExternalLink } from '@lucide/astro';
+
+// Authenticate user with Clerk
+const { userId, redirectToSignIn } = Astro.locals.auth();
+
+if (!userId) {
+  return redirectToSignIn();
+}
+
+let errorMsg = '';
+let successMsg = '';
+
+// Handle form submissions (POST)
+if (Astro.request.method === 'POST') {
+  try {
+    const data = await Astro.request.formData();
+    const action = data.get('_action')?.toString();
+
+    await dbConnect();
+
+    // 1. Ensure the user exists in our local MongoDB cache
+    let user = await User.findOne({ clerkId: userId });
+    if (!user) {
+      const currentUser = await Astro.locals.currentUser();
+      const email = currentUser?.emailAddresses[0]?.emailAddress || 'unknown@example.com';
+      user = await User.create({ clerkId: userId, email });
+    }
+
+    if (action === 'add') {
+      const urlInput = data.get('url')?.toString().trim();
+      const titleInput = data.get('title')?.toString().trim();
+      const descriptionInput = data.get('description')?.toString().trim();
+      
+      if (!urlInput) {
+        errorMsg = 'Please enter a URL.';
+      } else {
+        // Enforce protocol prefix for proper URL handling
+        const absoluteUrl = urlInput.startsWith('http://') || urlInput.startsWith('https://') 
+          ? urlInput 
+          : `https://${urlInput}`;
+
+        // Validate URL format
+        try {
+          new URL(absoluteUrl);
+        } catch (_) {
+          throw new Error('Please enter a valid URL (e.g. github.com/trending).');
+        }
+
+        // Parse a clean, aesthetic title from the domain + pathname
+        let parsedTitle = urlInput;
+        try {
+          const parsedUrl = new URL(absoluteUrl);
+          parsedTitle = parsedUrl.hostname.replace('www.', '');
+          if (parsedUrl.pathname && parsedUrl.pathname !== '/') {
+            const pathSnippet = parsedUrl.pathname.length > 25 
+              ? parsedUrl.pathname.substring(0, 25) + '...' 
+              : parsedUrl.pathname;
+            parsedTitle += pathSnippet;
+          }
+        } catch (_) {}
+
+        // Insert link
+        await Link.create({
+          url: absoluteUrl,
+          title: titleInput || parsedTitle,
+          description: descriptionInput || undefined,
+          clerkId: userId,
+          status: 'pending'
+        });
+
+        successMsg = 'Link successfully added to your list.';
+      }
+    } else if (action === 'delete') {
+      const linkId = data.get('linkId')?.toString();
+      if (!linkId) throw new Error('Missing Link ID.');
+
+      await Link.deleteOne({ _id: linkId, clerkId: userId });
+      successMsg = 'Link removed from your queue.';
+    }
+  } catch (err: any) {
+    errorMsg = err.message || 'An error occurred. Please try again.';
+  }
+}
+
+// Fetch links for the user
+await dbConnect();
+
+// Create local user cache if it does not exist yet (just in case they read the dashboard without posting)
+let localUser = await User.findOne({ clerkId: userId });
+if (!localUser) {
+  const currentUser = await Astro.locals.currentUser();
+  const email = currentUser?.emailAddresses[0]?.emailAddress || 'unknown@example.com';
+  localUser = await User.create({ clerkId: userId, email });
+}
+
+const pendingLinks = await Link.find({ clerkId: userId, status: 'pending' }).sort({ createdAt: -1 });
+const sentLinks = await Link.find({ clerkId: userId, status: 'sent' }).sort({ sentAt: -1 });
+---
+
+<Layout title="Dashboard — The Weekend Read">
+  <div class="max-w-5xl mx-auto px-6 py-12 w-full">
+    
+    <!-- Dashboard Header -->
+    <div class="border-b border-hairline pb-8 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase">Reader Workspace</span>
+        <h1 class="font-sans font-semibold text-3xl tracking-tight text-primary mt-1">Your Dashboard.</h1>
+        <p class="text-sm text-body mt-2">Add reading material below. We'll send you exactly three every Friday.</p>
+      </div>
+      
+      <!-- Statistics / Status -->
+      <div class="flex items-center gap-6">
+        <div class="bg-canvas border border-hairline rounded-md px-6 py-4 card-border-subtle flex flex-col items-center min-w-[120px]">
+          <span class="text-xs font-mono text-mute uppercase">Queue</span>
+          <span class="text-3xl font-semibold tracking-tight text-primary mt-1">{pendingLinks.length}</span>
+        </div>
+        <div class="bg-canvas border border-hairline rounded-md px-6 py-4 card-border-subtle flex flex-col items-center min-w-[120px]">
+          <span class="text-xs font-mono text-mute uppercase">Archived</span>
+          <span class="text-3xl font-semibold tracking-tight text-primary mt-1">{sentLinks.length}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback Alerts -->
+    {successMsg && (
+      <div class="mb-8 p-4 bg-canvas border border-success/30 text-success rounded-md text-sm flex items-center gap-2 card-border-subtle" role="alert" id="success-alert">
+        <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+        {successMsg}
+      </div>
+    )}
+    {errorMsg && (
+      <div class="mb-8 p-4 bg-error-soft/30 border border-error/20 text-error-deep rounded-md text-sm flex items-center gap-2 card-border-subtle" role="alert" id="error-alert">
+        <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+        {errorMsg}
+      </div>
+    )}
+
+    <!-- Workspace Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+      
+      <!-- Left Column: Link Submission and List Queue -->
+      <div class="lg:col-span-2 space-y-12">
+        
+        <!-- Add Link Form Card -->
+        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle">
+          <h2 class="font-sans font-semibold text-lg tracking-tight text-primary mb-4">Save a new link</h2>
+          
+          <form method="POST" class="space-y-4" id="add-link-form">
+            <input type="hidden" name="_action" value="add" />
+            
+            <!-- URL Input (Required) -->
+            <div>
+              <label for="url-input" class="block text-xs font-mono uppercase text-mute mb-1.5">Link URL</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-mute" aria-hidden="true">
+                  <Link2 class="w-4 h-4" />
+                </span>
+                <input 
+                  type="text" 
+                  name="url" 
+                  placeholder="Paste URL here (e.g. github.com/trending)" 
+                  required 
+                  class="w-full pl-10 h-11 bg-canvas text-ink border border-hairline rounded-sm focus:outline-none focus:border-hairline-strong focus:ring-1 focus:ring-hairline-strong text-sm transition-all"
+                  id="url-input"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <!-- Optional Title -->
+            <div>
+              <label for="title-input" class="block text-xs font-mono uppercase text-mute mb-1.5">Title (Optional)</label>
+              <input 
+                type="text" 
+                name="title" 
+                placeholder="Custom title for this link" 
+                class="w-full px-3.5 h-11 bg-canvas text-ink border border-hairline rounded-sm focus:outline-none focus:border-hairline-strong focus:ring-1 focus:ring-hairline-strong text-sm transition-all"
+                id="title-input"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Optional Description -->
+            <div>
+              <label for="description-input" class="block text-xs font-mono uppercase text-mute mb-1.5">Description (Optional)</label>
+              <textarea 
+                name="description" 
+                placeholder="Short notes or description about what this is..." 
+                rows="2"
+                class="w-full p-3 bg-canvas text-ink border border-hairline rounded-sm focus:outline-none focus:border-hairline-strong focus:ring-1 focus:ring-hairline-strong text-sm transition-all resize-none"
+                id="description-input"
+              ></textarea>
+            </div>
+
+            <div class="flex justify-end pt-1">
+              <button 
+                type="submit" 
+                class="w-full sm:w-auto h-11 px-6 bg-primary text-on-primary hover:bg-primary/95 font-semibold text-sm rounded-sm tracking-wide transition-all flex items-center justify-center gap-2 active:scale-[0.98] select-none"
+                id="add-link-submit"
+              >
+                <Plus class="w-4 h-4" />
+                Save Link
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Saved Links list (Queue) -->
+        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle">
+          <h2 class="font-sans font-semibold text-lg tracking-tight text-primary mb-1">Links Saved This Week</h2>
+          <p class="text-xs text-mute font-mono mb-6">UNCLICKABLE TO PREVENT DISTRACTION</p>
+
+          {pendingLinks.length === 0 ? (
+            <div class="py-12 border border-dashed border-hairline rounded-sm text-center flex flex-col items-center bg-canvas-soft">
+              <span class="text-xs font-mono text-mute uppercase">Queue is empty</span>
+              <p class="text-xs text-mute mt-2 max-w-xs">Drop links you encounter during the week. Check back Friday for your reading digest.</p>
+            </div>
+          ) : (
+            <ul class="divide-y divide-hairline" id="pending-links-list">
+              {pendingLinks.map((link) => (
+                <li class="py-4 flex items-center justify-between group">
+                  <div class="flex flex-col min-w-0 pr-4">
+                    <!-- Displayed as clean monospace text, not clickable -->
+                    <span class="font-mono text-sm font-medium text-primary tracking-tight truncate select-all" title={link.url}>
+                      {link.title || link.url}
+                    </span>
+                    {link.description && (
+                      <p class="text-xs text-body mt-1 line-clamp-2 select-all">
+                        {link.description}
+                      </p>
+                    )}
+                    <span class="text-[11px] text-mute font-mono mt-1.5">
+                      Added {new Date(link.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                  
+                  <!-- Small helper for deleting the link if added by mistake -->
+                  <form method="POST" class="shrink-0">
+                    <input type="hidden" name="_action" value="delete" />
+                    <input type="hidden" name="linkId" value={link._id} />
+                    <button 
+                      type="submit" 
+                      title="Remove from queue"
+                      class="p-2 text-mute hover:text-error hover:bg-error-soft/30 rounded-sm transition-all focus:outline-none focus:ring-1 focus:ring-error"
+                      id={`delete-btn-${link._id}`}
+                    >
+                      <Trash2 class="w-4 h-4" />
+                    </button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      <!-- Right Column: Permanent Archive -->
+      <div class="lg:col-span-1">
+        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle sticky top-24">
+          <div class="flex items-center gap-2 mb-4 border-b border-hairline pb-4">
+            <Archive class="w-4 h-4 text-mute" />
+            <h2 class="font-sans font-semibold text-lg tracking-tight text-primary">Your Archive</h2>
+          </div>
+
+          {sentLinks.length === 0 ? (
+            <div class="py-8 text-center bg-canvas-soft border border-dashed border-hairline rounded-sm">
+              <span class="text-xs font-mono text-mute uppercase">No links emailed yet</span>
+              <p class="text-[11px] text-mute mt-1 px-4">Once links are emailed in your Friday digest, they will appear here as clickable history.</p>
+            </div>
+          ) : (
+            <ul class="divide-y divide-hairline max-h-[450px] overflow-y-auto pr-1" id="archive-links-list">
+              {sentLinks.map((link) => (
+                <li class="py-3 flex flex-col gap-1">
+                  <!-- Clickable for the archive -->
+                  <a 
+                    href={link.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="font-sans font-medium text-xs text-link hover:text-link-deep hover:underline flex items-center justify-between gap-1 group/item min-w-0"
+                    title={link.url}
+                  >
+                    <span class="truncate">{link.title || link.url}</span>
+                    <ExternalLink class="w-3 h-3 opacity-0 group-hover/item:opacity-100 transition-opacity shrink-0" />
+                  </a>
+                  {link.description && (
+                    <p class="text-[11px] text-body mt-0.5 line-clamp-1">
+                      {link.description}
+                    </p>
+                  )}
+                  <span class="text-[10px] text-mute font-mono">
+                    Emailed {new Date(link.sentAt || link.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</Layout>

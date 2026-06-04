@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Privacy Policy — The Weekend Read" 
+  description="Read the privacy policy for The Weekend Read. Learn how we handle your data with respect and absolute privacy."
+>
+  <div class="max-w-3xl mx-auto px-6 py-20">
+    <div class="mb-12">
+      <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase">Legal</span>
+      <h1 class="font-sans font-semibold text-4xl tracking-tight text-primary mt-1">Privacy Policy.</h1>
+      <p class="text-xs text-mute font-mono mt-2">Last updated: June 5, 2026</p>
+    </div>
+
+    <div class="space-y-8 text-body text-sm leading-relaxed font-sans border-t border-hairline pt-10">
+      <section>
+        <h2 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">1. Information We Collect</h2>
+        <p class="mb-4">
+          At The Weekend Read, we believe in collecting as little personal data as possible. To provide our link-saving and email newsletter services, we process:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-xs">
+          <li><strong>Account Data:</strong> Managed securely via Clerk. This includes your email address to deliver your newsletters.</li>
+          <li><strong>Saved Links:</strong> The URLs, optional titles, and optional descriptions you explicitly save to your queue so we can curate your Friday digests.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">2. How We Use Data</h2>
+        <p class="mb-4">
+          Your data is used solely to run the service:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-xs">
+          <li>To display your saved links queue in your private dashboard.</li>
+          <li>To email your weekly newsletter digest using Resend.</li>
+          <li>We do <strong>not</strong> share, sell, or analyze your links for advertisements or marketing. There are no tracking scripts or third-party marketing cookies.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">3. Data Retention</h2>
+        <p>
+          Your saved links remain in our secure database until you explicitly delete them from your dashboard queue. You can delete your account at any time, which immediately deletes all your account information and saved queue from our databases.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">4. Security</h2>
+        <p>
+          We use industry-standard security protocols, including Clerk for multi-tenant passwordless authentication and TLS encryption for all data transit and database storage.
+        </p>
+      </section>
+    </div>
+  </div>
+</Layout>

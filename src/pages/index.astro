@@ -1,11 +1,296 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import { Show } from '@clerk/astro/components';
+import { Bookmark, Inbox, Sparkles, ArrowRight } from '@lucide/astro';
 ---
 
-<Layout>
-	<Welcome />
+<Layout 
+  title="The Weekend Read — Best Reading List App & Read Later Tool"
+  description="Stop hoarding links. The Weekend Read is the ultimate reading list app and read later tool. Save links from Chrome, Safari, or iPhone, and read 3 random articles every Friday."
+>
+  <!-- Hero Section with Mesh Gradient Backdrop -->
+  <section class="relative overflow-hidden pt-24 pb-20 px-6 border-b border-hairline bg-canvas">
+    
+    <!-- Vercel Mesh Gradient Atmosphere -->
+    <div class="absolute top-[-250px] left-1/2 -translate-x-1/2 w-[1000px] h-[550px] opacity-25 pointer-events-none blur-[100px] select-none -z-10" aria-hidden="true">
+      <div class="w-full h-full rounded-full bg-gradient-to-tr from-gradient-develop-start via-gradient-preview-start to-gradient-ship-start"></div>
+    </div>
+    
+    <div class="max-w-3xl mx-auto text-center flex flex-col items-center">
+      
+      <!-- Eyebrow Monospace Badge -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-canvas-soft border border-hairline rounded-full mb-6 animate-fade-in">
+        <Sparkles class="w-3.5 h-3.5 text-warning-deep" />
+        <span class="font-mono text-[11px] font-medium tracking-wide text-body uppercase">Enforcing Digital Minimalism</span>
+      </div>
+      
+      <!-- Display Headline (Vercel-style: sentence-case, negative tracking, period-terminated) -->
+      <h1 class="font-sans font-semibold text-4xl sm:text-5xl md:text-6xl tracking-[-1.5px] sm:tracking-[-2.4px] leading-[1.1] text-primary max-w-2xl mb-6">
+        Reclaim your attention. Read what actually matters.
+      </h1>
+      
+      <!-- Supporting Subtitle -->
+      <p class="font-sans text-lg sm:text-xl text-body max-w-xl mb-10 leading-relaxed font-normal">
+        Save articles during the week. Receive a focused selection of three reads every Friday, keeping your digital queue clean and your mind sharp.
+      </p>
+      
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+        <Show when="signed-in">
+          <a 
+            href="/dashboard" 
+            class="w-full sm:w-auto h-12 flex items-center justify-center gap-2 px-8 bg-primary text-on-primary hover:bg-primary/95 text-sm font-semibold rounded-pill tracking-wide transition-all shadow-md active:scale-[0.98]"
+            id="hero-dashboard-btn"
+          >
+            Go to Dashboard
+            <ArrowRight class="w-4 h-4" />
+          </a>
+        </Show>
+        <Show when="signed-out">
+          <a 
+            href="/sign-up" 
+            class="w-full sm:w-auto h-12 flex items-center justify-center gap-2 px-8 bg-primary text-on-primary hover:bg-primary/95 text-sm font-semibold rounded-pill tracking-wide transition-all shadow-md active:scale-[0.98]"
+            id="hero-signup-btn"
+          >
+            Start saving links
+            <ArrowRight class="w-4 h-4" />
+          </a>
+        </Show>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Showcase / Value Proposition Section -->
+  <section class="py-20 px-6 bg-canvas-soft border-b border-hairline">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center mb-16">
+        <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase">How It Works</span>
+        <h2 class="font-sans font-semibold text-2xl sm:text-3xl tracking-tight text-primary mt-2">
+          Designed for reading, not hoarding.
+        </h2>
+      </div>
+
+      <!-- Feature Grid: 3-column row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Feature Card 1 -->
+        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle card-border-hover">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-5">
+            <Bookmark class="w-5 h-5 text-primary" />
+          </div>
+          <h3 class="font-sans font-semibold text-lg text-primary tracking-tight mb-2">1. Save links cleanly</h3>
+          <p class="font-sans text-sm text-body leading-relaxed">
+            Found an interesting essay? Paste the URL and save it instantly. No cluttering tags, no folders, and no visual noise to distract you.
+          </p>
+        </div>
+        
+        <!-- Feature Card 2 -->
+        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle card-border-hover">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-5">
+            <Inbox class="w-5 h-5 text-primary" />
+          </div>
+          <h3 class="font-sans font-semibold text-lg text-primary tracking-tight mb-2">2. Get the Friday digest</h3>
+          <p class="font-sans text-sm text-body leading-relaxed">
+            Every Friday, our engine selects exactly three links from your collection and emails them in a clean newsletter. The rest stay out of sight.
+          </p>
+        </div>
+        
+        <!-- Feature Card 3 -->
+        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle card-border-hover">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-5">
+            <Sparkles class="w-5 h-5 text-primary" />
+          </div>
+          <h3 class="font-sans font-semibold text-lg text-primary tracking-tight mb-2">3. Defeat hoarding</h3>
+          <p class="font-sans text-sm text-body leading-relaxed">
+            Limiting your feed to three links ensures you actually read what you save. Once read, they move to your permanent archive.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SEO Context Section (600+ words with rich keyword integration) -->
+  <section class="py-24 px-6 bg-canvas border-b border-hairline" aria-labelledby="seo-section-title">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12 text-center sm:text-left">
+        <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase" id="seo-eyebrow">Deep Dive</span>
+        <h2 id="seo-section-title" class="font-sans font-semibold text-3xl tracking-tight text-primary mt-2">
+          Why Choose The Weekend Read as Your Ultimate Reading List App?
+        </h2>
+      </header>
+
+      <div class="space-y-10 text-body text-sm leading-relaxed font-sans">
+        <div>
+          <p class="mb-6">
+            In an era of information overload, we are constantly bombarded with fascinating essays, deep-dives, and news stories. To cope, most of us rely on built-in browser tools like the chrome reading list or the reading list safari. While these utilities make saving a link incredibly easy, they often turn into digital graveyards. We hit save, close the tab, and forget about the article forever. The problem isn’t our lack of interest—it is the lack of constraint. If you are looking to change how you consume online content, it’s time to move beyond standard browser extensions and experience the reading list designed to help you actually read. Welcome to The Weekend Read, the best reading list app built for focus.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">
+            Tackling Digital Hoarding: Why Your Chrome Reading List Fails
+          </h3>
+          <p class="mb-4">
+            Whether you search for the perfect reading list chrome extension or look for native alternatives on your mobile devices, the result is usually the same: an endless, intimidating list of links that only grows over time. This infinite accumulation creates cognitive fatigue. Every time you open my reading list app, you are forced to make a decision out of dozens of options, leading to choice paralysis.
+          </p>
+          <p>
+            The Weekend Read changes this dynamic entirely. Instead of displaying a massive backlog, this online reading list app hides your saved queue. It behaves as a smart read later companion. During the week, you can quickly add links whenever you find them. Then, every Friday, the application automatically curates a custom weekend list containing exactly three random articles from your collection. By limiting your selection to three items, we remove decision fatigue and encourage you to focus on reading rather than hoarding.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">
+            The Ultimate Read Later App for Mobile and Desktop
+          </h3>
+          <p class="mb-4">
+            Modern reading is multi-platform. You might discover an article on your laptop at work or find a Twitter thread on your phone during your commute. That is why The Weekend Read is optimized to function as a seamless reading list iphone option and a desktop web application.
+          </p>
+          <p>
+            Unlike native browser tools that don't sync well across different operating systems (like moving from a reading list safari on iOS to a Chrome browser on Windows), our platform is a unified online reading list app. You can save from any browser and access your curated three-article digest from any device. It is the perfect read later app for users who want their digital library to be clean, synchronized, and distraction-free.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">
+            Build a Better Reading Habit with a Focused Reading List
+          </h3>
+          <p class="mb-4">
+            Choosing a reading list app should be about improving your habits, not just storing links. The Weekend Read is designed with a premium, minimalist aesthetic that keeps you focused on the written word. There are no distracting recommendation algorithms, no flashing advertisements, and no tracking scripts to sell your data.
+          </p>
+          <p>
+            When Friday arrives, you receive a clean, beautifully formatted email digest with your three selected reads. Once you finish reading an article, you can archive it or mark it as read, keeping your queue pristine. If you fail to read them over the weekend, they remain, but you won't get a new batch until you clear your current plate. This gentle friction is what makes it the best reading list app for building a consistent, mindful reading routine. Stop hoarding links and start reading them with The Weekend Read.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section with JSON-LD Schema for SEO -->
+  <section class="py-24 px-6 bg-canvas-soft border-b border-hairline" aria-labelledby="faq-section-title">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-16 text-center">
+        <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase" id="faq-eyebrow">Questions</span>
+        <h2 id="faq-section-title" class="font-sans font-semibold text-3xl tracking-tight text-primary mt-2">
+          Frequently Asked Questions
+        </h2>
+      </header>
+
+      <div class="divide-y divide-hairline border-y border-hairline" id="faq-list">
+        <!-- Q1 -->
+        <div class="py-6 flex flex-col gap-2">
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight">
+            What is reading list?
+          </h3>
+          <p class="font-sans text-sm text-body leading-relaxed">
+            A reading list is a curated collection of articles, essays, websites, or online resources that you save to read at a later time. Instead of keeping dozens of tabs open or cluttering your browser, a reading list acts as a dedicated inbox for your digital reading material, helping you organize and schedule your reading.
+          </p>
+        </div>
+
+        <!-- Q2 -->
+        <div class="py-6 flex flex-col gap-2">
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight">
+            How do I find my reading list?
+          </h3>
+          <p class="font-sans text-sm text-body leading-relaxed">
+            You can access your personalized reading list anytime by logging into your account on The Weekend Read and visiting your dashboard. If you are using native browser tools, you can find the Chrome reading list in the side panel or bookmarks bar, and the Safari reading list in the sidebar (under the glasses icon) on macOS and iOS.
+          </p>
+        </div>
+
+        <!-- Q3 -->
+        <div class="py-6 flex flex-col gap-2">
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight">
+            How to check the reading list?
+          </h3>
+          <p class="font-sans text-sm text-body leading-relaxed">
+            To check your pending articles on The Weekend Read, log in to view your current weekly queue. To check your browser's built-in lists, click the Side Panel icon in Google Chrome and select "Reading list", or open the Sidebar in Safari on your iPhone or Mac and tap the Reading List tab.
+          </p>
+        </div>
+
+        <!-- Q4 -->
+        <div class="py-6 flex flex-col gap-2">
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight">
+            How to edit reading list?
+          </h3>
+          <p class="font-sans text-sm text-body leading-relaxed">
+            You can easily edit your queue in The Weekend Read by adding new links with custom titles and descriptions, or deleting items you no longer wish to read directly from your dashboard. For browser lists, right-click any item in your Chrome or Safari reading list to mark it as read or delete it permanently.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JSON-LD FAQPage Schema for Search Engines -->
+  <script type="application/ld+json" is:inline>
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is reading list?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<p>A reading list is a curated collection of articles, essays, websites, or online resources that you save to read at a later time. Instead of keeping dozens of tabs open or cluttering your browser, a reading list acts as a dedicated inbox for your digital reading material, helping you organize and schedule your reading.</p>"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I find my reading list?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<p>You can access your personalized reading list anytime by logging into your account on The Weekend Read and visiting your dashboard. If you are using native browser tools, you can find the Chrome reading list in the side panel or bookmarks bar, and the Safari reading list in the sidebar (under the glasses icon) on macOS and iOS.</p>"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How to check the reading list?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<p>To check your pending articles on The Weekend Read, log in to view your current weekly queue. To check your browser's built-in lists, click the Side Panel icon in Google Chrome and select 'Reading list', or open the Sidebar in Safari on your iPhone or Mac and tap the Reading List tab.</p>"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How to edit reading list?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<p>You can easily edit your queue in The Weekend Read by adding new links with custom titles and descriptions, or deleting items you no longer wish to read directly from your dashboard. For browser lists, right-click any item in your Chrome or Safari reading list to mark it as read or delete it permanently.</p>"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Polarity-Flipped Dark Band Callout -->
+  <section class="py-20 px-6 bg-primary text-on-primary relative overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center flex flex-col items-center">
+      <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase mb-3">Intentional Design</span>
+      <h2 class="font-sans font-semibold text-3xl tracking-tight leading-tight max-w-xl mb-6">
+        Designed for mindful reading.
+      </h2>
+      <p class="font-sans text-sm text-on-primary/70 max-w-md mb-8 leading-relaxed">
+        No algorithms, no endless scrolling, and no attention-grabbing notifications. Just a simple, intentional pipeline built to help you actually read and appreciate the stories you save.
+      </p>
+      <Show when="signed-in">
+        <a 
+          href="/dashboard" 
+          class="h-10 px-6 bg-canvas text-primary hover:bg-canvas-soft font-semibold text-xs rounded-pill flex items-center justify-center tracking-wide active:scale-[0.98] transition-transform"
+        >
+          View Dashboard
+        </a>
+      </Show>
+      <Show when="signed-out">
+        <a 
+          href="/sign-up" 
+          class="h-10 px-6 bg-canvas text-primary hover:bg-canvas-soft font-semibold text-xs rounded-pill flex items-center justify-center tracking-wide active:scale-[0.98] transition-transform"
+        >
+          Start For Free
+        </a>
+      </Show>
+    </div>
+  </section>
 </Layout>

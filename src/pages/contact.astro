@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Mail, MessageSquare } from '@lucide/astro';
+---
+
+<Layout 
+  title="Contact Us — The Weekend Read" 
+  description="Have questions or feedback? Contact the support team at The Weekend Read."
+>
+  <div class="max-w-3xl mx-auto px-6 py-20">
+    <div class="mb-12">
+      <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase">Support</span>
+      <h1 class="font-sans font-semibold text-4xl tracking-tight text-primary mt-1">Contact Us.</h1>
+      <p class="text-sm text-body mt-2">Get in touch with us. We usually respond within 24 hours.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-hairline pt-10">
+      
+      <!-- Contact Card 1: Email Support -->
+      <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle flex flex-col justify-between min-h-[160px]">
+        <div>
+          <div class="w-8 h-8 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-4">
+            <Mail class="w-4 h-4 text-primary" />
+          </div>
+          <h2 class="font-sans font-semibold text-base text-primary tracking-tight mb-1">Email Us</h2>
+          <p class="font-sans text-xs text-body leading-relaxed">
+            For account queries, data deletion requests, or general support.
+          </p>
+        </div>
+        <a href="mailto:support@readinglistapp.com" class="font-mono text-xs text-link hover:underline mt-4">
+          support@readinglistapp.com
+        </a>
+      </div>
+
+      <!-- Contact Card 2: Feedback & Ideas -->
+      <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle flex flex-col justify-between min-h-[160px]">
+        <div>
+          <div class="w-8 h-8 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-4">
+            <MessageSquare class="w-4 h-4 text-primary" />
+          </div>
+          <h2 class="font-sans font-semibold text-base text-primary tracking-tight mb-1">Feedback & Feature Ideas</h2>
+          <p class="font-sans text-xs text-body leading-relaxed">
+            We love hearing how you cure digital hoarding and improve reading habits.
+          </p>
+        </div>
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-link hover:underline mt-4">
+          Open a GitHub Issue
+        </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>

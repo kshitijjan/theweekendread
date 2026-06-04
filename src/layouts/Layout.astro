@@ -1,23 +1,183 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
+import { Show, UserButton } from '@clerk/astro/components';
+import { BookOpen } from '@lucide/astro';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogImage?: string;
+  ogType?: string;
+}
+
+const { 
+  title = "The Weekend Read — A Minimalist Link-Saver", 
+  description = "A dead-simple link-saver that prevents digital hoarding. Save links during the week, read exactly 3 randomly chosen links every Friday.",
+  keywords = "Reading list, reading list, the reading list, chrome reading list, reading list chrome, reading list iphone, reading list safari, reading list app, weekend list, best reading list app, my reading list app, online reading list app, read later, read later app",
+  ogImage = "/web-app-manifest-512x512.png",
+  ogType = "website"
+} = Astro.props;
+
+const { pathname } = Astro.url;
+const isDashboard = pathname.startsWith('/dashboard');
+const canonicalUrl = new URL(pathname, "https://readinglistapp.com").href;
+const ogUrl = new URL(pathname, "https://readinglistapp.com").href;
+---
+
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Weekend" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Best Practices -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={canonicalUrl} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, ogUrl).href} />
+    <meta property="og:site_name" content="The Weekend Read" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={ogUrl} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, ogUrl).href} />
+    
+    <!-- Inline styles for fonts to resolve flash of unstyled text -->
+    <style>
+      /* Prevent FOUC and set Vercel scroll behaviors */
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+    <!-- Dark/Light Mode Script (inline in head to avoid flicker) -->
+    <script is:inline>
+      const getTheme = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      
+      const theme = getTheme();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+  </head>
+  <body class="h-full flex flex-col bg-canvas-soft text-ink font-sans antialiased selection:bg-primary selection:text-on-primary">
+    
+    <!-- Premium Glassmorphic Nav Bar -->
+    <header class="sticky top-0 z-50 w-full bg-canvas/70 backdrop-blur-xl border-b border-hairline/50 transition-all duration-300">
+      
+      <div class="max-w-7xl mx-auto py-6 px-6 sm:px-10 flex items-center justify-between">
+        
+        <!-- Logo and Brand -->
+        <a href="/" class="flex items-center gap-2 hover:opacity-90 transition-opacity" id="nav-home-link">
+          <BookOpen class="w-5 h-5 text-primary" stroke-width={2.5} />
+          <span class="font-sans font-semibold text-base sm:text-lg tracking-tight text-primary">The Weekend Read</span>
+        </a>
+        
+        <!-- Navigation Links & Authentication -->
+        <nav class="flex items-center gap-2 sm:gap-4" aria-label="Main Navigation">
+          <Show when="signed-in">
+            <a 
+              href="/dashboard" 
+              class={`text-sm font-medium transition-all duration-200 px-4 py-1.5 rounded-full ${
+                isDashboard 
+                  ? 'bg-canvas border border-hairline-strong/20 text-ink font-semibold shadow-xs' 
+                  : 'text-body hover:text-ink hover:bg-canvas-soft-2/80'
+              }`}
+              id="nav-dashboard-link"
+            >
+              Dashboard
+            </a>
+            <div class="ml-2 flex items-center justify-center w-9 h-9 rounded-full border border-hairline hover:border-hairline-strong hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden shadow-xs">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </Show>
+          <Show when="signed-out">
+            <a 
+              href="/sign-in" 
+              class="h-10 px-5 bg-primary text-on-primary hover:bg-primary/95 text-sm font-semibold rounded-full tracking-wide transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center shadow-xs"
+              id="nav-login-link"
+            >
+              Log In
+            </a>
+          </Show>
+
+          <!-- Theme Toggle Button -->
+          <button 
+            id="theme-toggle" 
+            class="ml-2 w-9 h-9 flex items-center justify-center rounded-full border border-hairline hover:border-hairline-strong hover:bg-canvas-soft-2/80 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shadow-xs"
+            aria-label="Toggle theme"
+          >
+            <!-- Sun Icon (shown in dark mode) -->
+            <svg id="sun-icon" class="w-4.5 h-4.5 text-ink hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+            <!-- Moon Icon (shown in light mode) -->
+            <svg id="moon-icon" class="w-4.5 h-4.5 text-ink dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </nav>
+        
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col justify-start">
+      <slot />
+    </main>
+
+    <!-- Sleek Minimalist Footer -->
+    <footer class="w-full bg-canvas border-t border-hairline py-8" aria-label="Site Footer">
+      <div class="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-mute font-mono">
+        <div>
+          <span>&copy; {new Date().getFullYear()} readinglistapp.com. All rights reserved.</span>
+        </div>
+        <div class="flex items-center gap-4 flex-wrap justify-center sm:justify-end">
+          <a href="/about" class="hover:text-body transition-colors">About Us</a>
+          <span>&middot;</span>
+          <a href="/privacy" class="hover:text-body transition-colors">Privacy Policy</a>
+          <span>&middot;</span>
+          <a href="/terms" class="hover:text-body transition-colors">Terms</a>
+          <span>&middot;</span>
+          <a href="/contact" class="hover:text-body transition-colors">Contact Us</a>
+          <span>&middot;</span>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-body transition-colors">GitHub</a>
+        </div>
+      </div>
+    </footer>
+    
+    <script>
+      const toggleBtn = document.getElementById('theme-toggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const isDark = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+      }
+    </script>
+  </body>
+</html>

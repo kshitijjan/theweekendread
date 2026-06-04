@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Sparkles, Heart } from '@lucide/astro';
+---
+
+<Layout 
+  title="About Us — The Weekend Read" 
+  description="Discover the philosophy of digital minimalism. Meet the team behind The Weekend Read, the ultimate link-saver and read later tool."
+>
+  <div class="max-w-3xl mx-auto px-6 py-20">
+    <div class="text-center sm:text-left mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-canvas-soft border border-hairline rounded-full mb-6">
+        <Sparkles class="w-3.5 h-3.5 text-warning-deep" />
+        <span class="font-mono text-[11px] font-medium tracking-wide text-body uppercase">Our Philosophy</span>
+      </div>
+      <h1 class="font-sans font-semibold text-4xl tracking-tight text-primary">About Us.</h1>
+      <p class="text-sm text-body mt-2">Why we built a reading list app designed for constraint, not hoarding.</p>
+    </div>
+
+    <div class="space-y-8 text-body text-sm leading-relaxed font-sans border-t border-hairline pt-10">
+      <section>
+        <h2 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">The Problem: Infinite Hoarding</h2>
+        <p class="mb-4">
+          The internet is a vast repository of human knowledge, but it is also a firehose of distractions. Every day, we encounter fascinating long-form essays, tech deep-dives, and tutorials. With built-in tools like the Chrome reading list or Safari reading list, we hit "save" in a split second. 
+        </p>
+        <p>
+          But the reality is: saving is not reading. Without constraints, our reading lists become endless digital graveyards, generating cognitive guilt and choice paralysis. Every time you open your list, you face hundreds of options, and you end up closing the tab and returning to the social media feed.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-sans font-semibold text-lg text-primary tracking-tight mb-3">Our Mission: Minimalist Constraint</h2>
+        <p class="mb-4">
+          The Weekend Read was born out of a desire for digital minimalism. We believe that constraints breed focus. By hiding your full queue and emailing you exactly three randomly chosen links every Friday, we remove the friction of choosing. 
+        </p>
+        <p>
+          You don't need another feed; you need a system that forces you to read what you save. Once you read your weekly three, they are archived, and your plate is clean. It's a simple, intentional pipeline for curious minds.
+        </p>
+      </section>
+
+      <section class="bg-canvas-soft border border-hairline rounded-md p-6 card-border-subtle">
+        <h2 class="font-sans font-semibold text-base text-primary tracking-tight mb-2 flex items-center gap-2">
+          <Heart class="w-4 h-4 text-error" /> Built with Intent
+        </h2>
+        <p class="text-xs text-mute leading-relaxed font-mono">
+          We are a small group of developers and writers who value focused learning. The Weekend Read has no ads, no recommendation algorithms, and no tracking scripts. We build software we use ourselves, every single day.
+        </p>
+      </section>
+    </div>
+  </div>
+</Layout>
