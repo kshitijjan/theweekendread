@@ -103,10 +103,10 @@ const sentLinks = await Link.find({ clerkId: userId, status: 'sent' }).sort({ se
 ---
 
 <Layout title="Dashboard — The Weekend Read">
-  <div class="max-w-5xl mx-auto px-6 py-12 w-full">
+  <div class="max-w-5xl mx-auto px-6 py-8 sm:py-12 w-full">
     
     <!-- Dashboard Header -->
-    <div class="border-b border-hairline pb-8 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="border-b border-hairline pb-8 mb-8 sm:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div>
         <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase">Reader Workspace</span>
         <h1 class="font-sans font-semibold text-3xl tracking-tight text-primary mt-1">Your Dashboard.</h1>
@@ -114,14 +114,14 @@ const sentLinks = await Link.find({ clerkId: userId, status: 'sent' }).sort({ se
       </div>
       
       <!-- Statistics / Status -->
-      <div class="flex items-center gap-6">
-        <div class="bg-canvas border border-hairline rounded-md px-6 py-4 card-border-subtle flex flex-col items-center min-w-[120px]">
-          <span class="text-xs font-mono text-mute uppercase">Queue</span>
-          <span class="text-3xl font-semibold tracking-tight text-primary mt-1">{pendingLinks.length}</span>
+      <div class="flex items-center justify-between sm:justify-start gap-4 sm:gap-6 w-full sm:w-auto">
+        <div class="bg-canvas border border-hairline rounded-md px-4 py-3 sm:px-6 sm:py-4 card-border-subtle flex flex-col items-center flex-1 sm:flex-initial min-w-[100px] sm:min-w-[120px]">
+          <span class="text-[10px] sm:text-xs font-mono text-mute uppercase">Queue</span>
+          <span class="text-2xl sm:text-3xl font-semibold tracking-tight text-primary mt-1">{pendingLinks.length}</span>
         </div>
-        <div class="bg-canvas border border-hairline rounded-md px-6 py-4 card-border-subtle flex flex-col items-center min-w-[120px]">
-          <span class="text-xs font-mono text-mute uppercase">Archived</span>
-          <span class="text-3xl font-semibold tracking-tight text-primary mt-1">{sentLinks.length}</span>
+        <div class="bg-canvas border border-hairline rounded-md px-4 py-3 sm:px-6 sm:py-4 card-border-subtle flex flex-col items-center flex-1 sm:flex-initial min-w-[100px] sm:min-w-[120px]">
+          <span class="text-[10px] sm:text-xs font-mono text-mute uppercase">Archived</span>
+          <span class="text-2xl sm:text-3xl font-semibold tracking-tight text-primary mt-1">{sentLinks.length}</span>
         </div>
       </div>
     </div>
@@ -141,13 +141,13 @@ const sentLinks = await Link.find({ clerkId: userId, status: 'sent' }).sort({ se
     )}
 
     <!-- Workspace Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
       
       <!-- Left Column: Link Submission and List Queue -->
       <div class="lg:col-span-2 space-y-12">
         
         <!-- Add Link Form Card -->
-        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle">
+        <div class="bg-canvas border border-hairline rounded-md p-5 sm:p-6 card-border-subtle">
           <h2 class="font-sans font-semibold text-lg tracking-tight text-primary mb-4">Save a new link</h2>
           
           <form method="POST" class="space-y-4" id="add-link-form">
@@ -211,7 +211,7 @@ const sentLinks = await Link.find({ clerkId: userId, status: 'sent' }).sort({ se
         </div>
 
         <!-- Saved Links list (Queue) -->
-        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle">
+        <div class="bg-canvas border border-hairline rounded-md p-5 sm:p-6 card-border-subtle">
           <h2 class="font-sans font-semibold text-lg tracking-tight text-primary mb-1">Links Saved This Week</h2>
           <p class="text-xs text-mute font-mono mb-6">UNCLICKABLE TO PREVENT DISTRACTION</p>
 
@@ -261,7 +261,7 @@ const sentLinks = await Link.find({ clerkId: userId, status: 'sent' }).sort({ se
 
       <!-- Right Column: Permanent Archive -->
       <div class="lg:col-span-1">
-        <div class="bg-canvas border border-hairline rounded-md p-6 card-border-subtle sticky top-24">
+        <div class="bg-canvas border border-hairline rounded-md p-5 sm:p-6 card-border-subtle sticky top-24">
           <div class="flex items-center gap-2 mb-4 border-b border-hairline pb-4">
             <Archive class="w-4 h-4 text-mute" />
             <h2 class="font-sans font-semibold text-lg tracking-tight text-primary">Your Archive</h2>

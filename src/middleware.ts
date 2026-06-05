@@ -3,6 +3,10 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/astro/server';
 // Define public routes that don't require Clerk authentication
 const isPublicRoute = createRouteMatcher([
   '/', 
+  '/about(.*)',
+  '/contact(.*)',
+  '/privacy(.*)',
+  '/terms(.*)',
   '/sign-in(.*)', 
   '/sign-up(.*)', 
   '/api/send-digest(.*)'

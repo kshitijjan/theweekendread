@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { AlertTriangle, ArrowRight } from '@lucide/astro';
+
+// SSR 500 pages receive the error object as a prop in Astro
+interface Props {
+  error: unknown;
+}
+
+const { error } = Astro.props;
+const errorMessage = error instanceof Error ? error.message : 'Unknown server error';
+---
+
+<Layout 
+  title="Server Error — The Weekend Read" 
+  description="Something went wrong on our server. Let's return to digital minimalism."
+>
+  <div class="max-w-xl mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center text-center">
+    
+    <!-- Icon -->
+    <AlertTriangle class="w-8 h-8 text-warning-deep animate-pulse mb-3 mx-auto" />
+
+    <!-- Eyebrow -->
+    <span class="font-mono text-xs font-semibold tracking-wider text-warning-deep uppercase mb-3">500 Error</span>
+
+    <!-- Display Headline -->
+    <h1 class="font-sans font-semibold text-3xl sm:text-4xl tracking-tight text-primary mb-4">
+      A glitch in the signal.
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="font-sans text-sm text-body leading-relaxed max-w-md mb-8">
+      An unexpected error occurred on our server. We have been notified and are resolving the issue. Please try reloading or returning later.
+    </p>
+
+    <!-- Error Detail (Only in Dev Mode / hidden or subtle for production) -->
+    {process.env.NODE_ENV === 'development' && (
+      <div class="w-full text-left bg-canvas-soft border border-hairline rounded-sm p-4 mb-10 overflow-x-auto">
+        <span class="block text-[10px] font-mono text-mute uppercase mb-1">Details (Visible in Development)</span>
+        <pre class="font-mono text-xs text-error-deep whitespace-pre-wrap">{errorMessage}</pre>
+      </div>
+    )}
+
+    <!-- Call to Actions -->
+    <div class="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+      <button 
+        onclick="window.location.reload()"
+        class="w-full sm:w-auto h-11 flex items-center justify-center gap-2 px-6 bg-primary text-on-primary hover:bg-primary/95 text-xs font-semibold rounded-pill tracking-wide transition-all shadow-xs active:scale-[0.98] cursor-pointer"
+        id="error-reload-btn"
+      >
+        Reload Page
+        <ArrowRight class="w-3.5 h-3.5" />
+      </button>
+      <a 
+        href="/" 
+        class="w-full sm:w-auto h-11 flex items-center justify-center px-6 bg-canvas border border-hairline hover:bg-canvas-soft text-xs font-semibold rounded-pill tracking-wide transition-all active:scale-[0.98]"
+        id="error-home-btn"
+      >
+        Go to Homepage
+      </a>
+    </div>
+
+  </div>
+</Layout>

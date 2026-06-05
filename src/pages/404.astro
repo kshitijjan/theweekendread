@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Compass, ArrowRight } from '@lucide/astro';
+---
+
+<Layout 
+  title="Page Not Found — The Weekend Read" 
+  description="The page you are looking for does not exist. Let's return to digital minimalism."
+>
+  <div class="max-w-xl mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center text-center">
+    
+    <!-- Icon -->
+    <Compass class="w-8 h-8 text-error-deep animate-pulse mb-3 mx-auto" />
+
+    <!-- Eyebrow -->
+    <span class="font-mono text-xs font-semibold tracking-wider text-error-deep uppercase mb-3">404 Error</span>
+
+    <!-- Display Headline -->
+    <h1 class="font-sans font-semibold text-3xl sm:text-4xl tracking-tight text-primary mb-4">
+      Lost in the noise.
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="font-sans text-sm text-body leading-relaxed max-w-md mb-10">
+      The page you are looking for has been archived, deleted, or never existed. Let's get you back to what actually matters.
+    </p>
+
+    <!-- Call to Actions -->
+    <div class="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+      <a 
+        href="/" 
+        class="w-full sm:w-auto h-11 flex items-center justify-center gap-2 px-6 bg-primary text-on-primary hover:bg-primary/95 text-xs font-semibold rounded-pill tracking-wide transition-all shadow-xs active:scale-[0.98]"
+        id="error-home-btn"
+      >
+        Go to Homepage
+        <ArrowRight class="w-3.5 h-3.5" />
+      </a>
+      <a 
+        href="/dashboard" 
+        class="w-full sm:w-auto h-11 flex items-center justify-center px-6 bg-canvas border border-hairline hover:bg-canvas-soft text-xs font-semibold rounded-pill tracking-wide transition-all active:scale-[0.98]"
+        id="error-dashboard-btn"
+      >
+        View Dashboard
+      </a>
+    </div>
+
+  </div>
+</Layout>
