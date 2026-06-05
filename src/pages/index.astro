@@ -169,6 +169,86 @@ import { Bookmark, Inbox, Sparkles, ArrowRight } from '@lucide/astro';
     </div>
   </section>
 
+  <!-- Explore Section linking to MPA pages -->
+  <section class="py-20 px-6 bg-canvas border-b border-hairline" aria-labelledby="explore-section-title">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center mb-16">
+        <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase">Resources & Legal</span>
+        <h2 id="explore-section-title" class="font-sans font-semibold text-2xl sm:text-3xl tracking-tight text-primary mt-2">
+          Explore The Weekend Read
+        </h2>
+        <p class="font-sans text-sm text-body mt-2 max-w-lg mx-auto">
+          Discover our mission of digital minimalism, get in touch with our team, or review our terms and privacy policy.
+        </p>
+      </div>
+
+      <!-- Grid of 4 Pages -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card 1: About Us -->
+        <a href="/about" class="group bg-canvas border border-hairline rounded-md p-6 card-border-subtle card-border-hover block hover:no-underline" id="home-about-link">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-5 group-hover:border-hairline-strong transition-colors">
+            <Sparkles class="w-5 h-5 text-primary" />
+          </div>
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight mb-2 flex items-center gap-1 group-hover:text-link transition-colors">
+            About Us
+            <span class="inline-block transform group-hover:translate-x-1 transition-transform">&rarr;</span>
+          </h3>
+          <p class="font-sans text-xs text-body leading-relaxed">
+            Read our philosophy behind enforcing digital constraints and preventing online hoarding.
+          </p>
+        </a>
+
+        <!-- Card 2: Contact Us -->
+        <a href="/contact" class="group bg-canvas border border-hairline rounded-md p-6 card-border-subtle card-border-hover block hover:no-underline" id="home-contact-link">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-5 group-hover:border-hairline-strong transition-colors">
+            <Inbox class="w-5 h-5 text-primary" />
+          </div>
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight mb-2 flex items-center gap-1 group-hover:text-link transition-colors">
+            Contact Us
+            <span class="inline-block transform group-hover:translate-x-1 transition-transform">&rarr;</span>
+          </h3>
+          <p class="font-sans text-xs text-body leading-relaxed">
+            Have questions or feedback? Get in touch with our support and development team.
+          </p>
+        </a>
+
+        <!-- Card 3: Privacy Policy -->
+        <a href="/privacy" class="group bg-canvas border border-hairline rounded-md p-6 card-border-subtle card-border-hover block hover:no-underline" id="home-privacy-link">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-5 group-hover:border-hairline-strong transition-colors">
+            <Bookmark class="w-5 h-5 text-primary" />
+          </div>
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight mb-2 flex items-center gap-1 group-hover:text-link transition-colors">
+            Privacy Policy
+            <span class="inline-block transform group-hover:translate-x-1 transition-transform">&rarr;</span>
+          </h3>
+          <p class="font-sans text-xs text-body leading-relaxed">
+            Learn how we handle your data with respect and absolute privacy. No tracking scripts or ads.
+          </p>
+        </a>
+
+        <!-- Card 4: Terms & Conditions -->
+        <a href="/terms" class="group bg-canvas border border-hairline rounded-md p-6 card-border-subtle card-border-hover block hover:no-underline" id="home-terms-link">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm bg-canvas-soft-2 border border-hairline mb-5 group-hover:border-hairline-strong transition-colors">
+            <svg class="w-5 h-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h3 class="font-sans font-semibold text-base text-primary tracking-tight mb-2 flex items-center gap-1 group-hover:text-link transition-colors">
+            Terms of Service
+            <span class="inline-block transform group-hover:translate-x-1 transition-transform">&rarr;</span>
+          </h3>
+          <p class="font-sans text-xs text-body leading-relaxed">
+            Understand the acceptable use guidelines, account responsibilities, and service availability.
+          </p>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
   <!-- FAQ Section with JSON-LD Schema for SEO -->
   <section class="py-24 px-6 bg-canvas-soft border-b border-hairline" aria-labelledby="faq-section-title">
     <div class="max-w-3xl mx-auto">

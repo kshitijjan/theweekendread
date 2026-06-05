@@ -93,3 +93,11 @@
     --color-error-deep: #ff3333;
   }
 }
+
+/* User Avatar Placeholder for Clerk Loading State */
+.user-avatar-placeholder {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23888888'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'/%3E%3C/svg%3E");
+  background-size: 55%;
+  background-position: center;
+  background-repeat: no-repeat;
+}

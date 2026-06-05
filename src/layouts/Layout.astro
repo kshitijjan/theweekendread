@@ -98,6 +98,28 @@ const ogUrl = new URL(pathname, "https://readinglistapp.com").href;
         
         <!-- Navigation Links & Authentication -->
         <nav class="flex items-center gap-2 sm:gap-4" aria-label="Main Navigation">
+          <a 
+            href="/about" 
+            class={`text-sm font-medium transition-all duration-200 px-3 py-1.5 rounded-full ${
+              pathname === '/about' 
+                ? 'bg-canvas border border-hairline-strong/20 text-ink font-semibold shadow-xs' 
+                : 'text-body hover:text-ink hover:bg-canvas-soft-2/80'
+            }`}
+            id="nav-about-link"
+          >
+            About
+          </a>
+          <a 
+            href="/contact" 
+            class={`text-sm font-medium transition-all duration-200 px-3 py-1.5 rounded-full ${
+              pathname === '/contact' 
+                ? 'bg-canvas border border-hairline-strong/20 text-ink font-semibold shadow-xs' 
+                : 'text-body hover:text-ink hover:bg-canvas-soft-2/80'
+            }`}
+            id="nav-contact-link"
+          >
+            Contact
+          </a>
           <Show when="signed-in">
             <a 
               href="/dashboard" 
@@ -110,8 +132,16 @@ const ogUrl = new URL(pathname, "https://readinglistapp.com").href;
             >
               Dashboard
             </a>
-            <div class="ml-2 flex items-center justify-center w-9 h-9 rounded-full border border-hairline hover:border-hairline-strong hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden shadow-xs">
-              <UserButton afterSignOutUrl="/" />
+            <div class="ml-2 relative w-8 h-8 rounded-full bg-canvas-soft-2 border border-hairline hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center shadow-xs user-avatar-placeholder" id="nav-user-button-container">
+              <UserButton 
+                afterSignOutUrl="/" 
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-8 h-8",
+                    userButtonTrigger: "w-8 h-8 focus:outline-none"
+                  }
+                }}
+              />
             </div>
           </Show>
           <Show when="signed-out">
