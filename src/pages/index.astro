@@ -9,14 +9,14 @@ import { Bookmark, Inbox, Sparkles, ArrowRight } from '@lucide/astro';
   description="Stop hoarding links. The Weekend Read is the ultimate reading list app and read later tool. Save links from Chrome, Safari, or iPhone, and read 3 random articles every Friday."
 >
   <!-- Hero Section with Mesh Gradient Backdrop -->
-  <section class="relative overflow-hidden pt-24 pb-20 px-6 border-b border-hairline bg-canvas">
+  <section class="relative overflow-hidden -mt-20 pt-[176px] pb-20 px-6 border-b border-hairline bg-canvas min-h-screen flex flex-col justify-center">
     
-    <!-- Vercel Mesh Gradient Atmosphere -->
-    <div class="absolute top-[-250px] left-1/2 -translate-x-1/2 w-[1000px] h-[550px] opacity-25 pointer-events-none blur-[100px] select-none -z-10" aria-hidden="true">
-      <div class="w-full h-full rounded-full bg-gradient-to-tr from-gradient-develop-start via-gradient-preview-start to-gradient-ship-start"></div>
-    </div>
+    <!-- Vanta Fog Background -->
+    <div id="vanta-fog-bg" class="absolute inset-0 opacity-35 dark:opacity-65 pointer-events-none z-0" aria-hidden="true"></div>
+    <!-- Smooth Fog Fade-Out Gradient -->
+    <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-canvas to-transparent pointer-events-none z-0" aria-hidden="true"></div>
     
-    <div class="max-w-3xl mx-auto text-center flex flex-col items-center">
+    <div class="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center">
       
       <!-- Eyebrow Monospace Badge -->
       <div class="inline-flex items-center gap-2 px-3 py-1 bg-canvas-soft border border-hairline rounded-full mb-6 animate-fade-in">
@@ -170,7 +170,7 @@ import { Bookmark, Inbox, Sparkles, ArrowRight } from '@lucide/astro';
   </section>
 
   <!-- Explore Section linking to MPA pages -->
-  <section class="py-20 px-6 bg-canvas border-b border-hairline" aria-labelledby="explore-section-title">
+  <section class="py-20 px-6 bg-canvas-soft border-b border-hairline" aria-labelledby="explore-section-title">
     <div class="max-w-5xl mx-auto">
       
       <div class="text-center mb-16">
@@ -250,7 +250,7 @@ import { Bookmark, Inbox, Sparkles, ArrowRight } from '@lucide/astro';
   </section>
 
   <!-- FAQ Section with JSON-LD Schema for SEO -->
-  <section class="py-24 px-6 bg-canvas-soft border-b border-hairline" aria-labelledby="faq-section-title">
+  <section class="py-24 px-6 bg-canvas border-b border-hairline" aria-labelledby="faq-section-title">
     <div class="max-w-3xl mx-auto">
       <header class="mb-16 text-center">
         <span class="font-mono text-xs font-semibold tracking-wider text-mute uppercase" id="faq-eyebrow">Questions</span>
@@ -373,4 +373,58 @@ import { Bookmark, Inbox, Sparkles, ArrowRight } from '@lucide/astro';
       </Show>
     </div>
   </section>
+
+  <!-- Scripts for Vanta Fog Effect -->
+  <script is:inline>
+    // Bulletproof dynamic script loader to ensure correct execution sequence and prevent layout-blocking loads
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    async function initVanta() {
+      const container = document.getElementById('vanta-fog-bg');
+      if (!container) return;
+      
+      try {
+        // Load Three.js first if not already loaded globally
+        if (typeof window.THREE === 'undefined') {
+          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js');
+        }
+        // Load Vanta Fog next if not already loaded globally
+        if (typeof window.VANTA === 'undefined') {
+          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.fog.min.js');
+        }
+        
+        // Initialize the effect
+        window.VANTA.FOG({
+          el: "#vanta-fog-bg",
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          highlightColor: 0x0,
+          midtoneColor: 0xf0e9e9,
+          lowlightColor: 0xc5c5c5,
+          baseColor: 0x0,
+          blurFactor: 0.67
+        });
+      } catch (err) {
+        console.error('Failed to load Vanta Fog scripts:', err);
+      }
+    }
+
+    // Run when the DOM is fully interactive
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initVanta);
+    } else {
+      initVanta();
+    }
+  </script>
 </Layout>

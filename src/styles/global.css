@@ -47,6 +47,9 @@
 
 /* Custom Base Layer Defaults */
 @layer base {
+  html {
+    font-size: 110%; /* Scales entire design system by 1.1x proportionally for better readability */
+  }
   body {
     background-color: var(--color-canvas-soft);
     color: var(--color-ink);
