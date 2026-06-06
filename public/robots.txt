@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Host
+Host: https://readinglistapp.com
+
+# Sitemaps
+Sitemap: https://readinglistapp.com/sitemap.xml
